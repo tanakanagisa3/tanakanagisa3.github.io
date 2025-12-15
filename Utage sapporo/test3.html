@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Utage Sapporo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Orbitron:wght@400..900&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Kaisei+Decol&family=Orbitron:wght@400..900&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Serif+Display:ital@0;1&family=Kaisei+Decol&family=Orbitron:wght@400..900&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Serif+Display:ital@0;1&family=Kaisei+Decol&family=Orbitron:wght@400..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            overflow-x: hidden;
+            /* overflow-y: hidden; */
+            font-family: sans-serif;
+        }
+
+        .kaisei-decol-regular {
+            font-family: "Kaisei Decol", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+
+
+        .scroll-container {
+            display: flex;
+            height: 100vh;
+            width: 500vw;
+            /* 5セクション分 */
+            scroll-behavior: smooth;
+        }
+
+        .item {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            flex-shrink: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            /* または transparent */
+            transition: background-color 0.3s;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            /* border: 60px solid #ffffffb3; */
+            box-sizing: border-box;
+            background-origin: content-box;
+            background-clip: content-box;
+            padding: 60px;
+        }
+
+        /* 擬似要素でグラデーションボーダー */
+        .item::before {
+            content: "";
+            pointer-events: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 0;
+            /* 必要なら調整 */
+            padding: 60px;
+            /* ボーダーの幅と同じ */
+            background: linear-gradient(135deg, #1a1a1a, #444, #bfa76f, #222);
+
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            box-sizing: border-box;
+            z-index: 1;
+        }
+
+        .item:hover::before {
+            background-color: rgba(0, 0, 0, 0.5);
+            /* ちょっと暗くなる */
+
+        }
+
+        .item::after {
+            content: "";
+            pointer-events: none;
+            position: absolute;
+            top: 60px;
+            /* 枠の幅だけ下げる */
+            left: 60px;
+            /* 枠の幅だけ右にずらす */
+            right: 60px;
+            bottom: 60px;
+            background-color: rgba(0, 0, 0, 0);
+            transition: background-color 0.3s ease;
+            z-index: 2;
+            border-radius: 0;
+        }
+
+        .item:hover::after {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+
+
+        /* モーダル基本 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            color: white;
+            text-align: center;
+            max-width: 80%;
+            max-height: 80vh;
+            /* 画面高さの80%くらいまで */
+            overflow-y: auto;
+            /* 縦スクロールできるように */
+            padding: 1em;
+            background: #222;
+            border-radius: 8px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            z-index: 2100;
+        }
+
+        .item img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            /* 全体をカバー、縦横比キープ */
+            display: block;
+        }
+
+        .section1 {
+            background-image: url("./photo/floor3.jpeg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .neon-title {
+            font-size: 4rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 40px;
+            position: relative;
+            z-index: 3;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(190deg, #6c0be2, #fee440);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        .section-container {
+            display: flex;
+            gap: 50px;
+            padding-bottom: 50px;
+            margin: 0 auto;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .section-container img {
+            width: 300px;
+        }
+
+        /* .section-container p {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 50px;
+            width: 500px;
+            position: relative;
+            z-index: 3;
+        } */
+
+        .section2 {
+            background-image: url("./photo/floor8.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 10rem;
+            letter-spacing: 1.1rem;
+            position: relative;
+            z-index: 3;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+        }
+
+        .section3 {
+            background-image: url("./photo/vip3.jpeg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .section4 {
+            background-image: url("./photo/nikka.webp");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .section5 {
+            background-image: url("./photo/floor9.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .section6 {
+            background-image: url("./photo/everyone.JPG");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .section7 {
+            background-image: url("./photo/dancer2.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .section8 {
+            background-image: url("./photo/vip4.jpeg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .dot-indicator {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 99999;
+            pointer-events: none;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: #000;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .dot.active {
+            opacity: 1;
+            background-color: #00ffff;
+        }
+
+        .global-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 65px;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            margin-left: 35px;
+            /* 下の要素をクリック可能にするなら */
+        }
+
+        .global-header nav {
+            pointer-events: auto;
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            /* li の間隔 */
+            position: relative;
+            list-style: none;
+        }
+
+        .nav-menu li {
+            position: relative;
+            padding: 0px 20px;
+        }
+
+        .nav-menu li:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateX(20px) translateY(-50%);
+            height: 20px;
+            width: 1px;
+            background: #000;
+        }
+
+
+        .nav-menu a:hover {
+            color: red;
+            /* ホバー時の色（好みで変更OK） */
+        }
+
+        .nav-menu a {
+            position: relative;
+            display: inline-block;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 100%;
+            height: 2px;
+            background: #000;
+            /* 下線の色 */
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .nav-menu a:hover::after {
+            transform: scaleX(1);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .logo {
+            width: 90px;
+        }
+
+        #modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .home-img {
+            filter: invert(1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .video-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 11;
+            display: block;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #hexCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 8;
+            /* ロゴやナビより下、画像の上にも行かないよう調整 */
+            mask-image: radial-gradient(closest-side, transparent 400px, black 240px);
+            /* これは真ん中抜き、端だけ見せたい例。必要に応じて調整 */
+        }
+
+        .social-column {
+            position: fixed;
+            bottom: 60px;
+            right: 2px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .social-column a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.3);
+            /* ボーダーと同化するように */
+            border: 1px solid;
+            border-image: linear-gradient(135deg, #222, #999, #444) 1;
+            border-radius: 8px;
+            color: #bfa76f;
+            font-size: 1.4rem;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .social-column a:hover {
+            color: #fff;
+            text-shadow: 0 0 5px #bfa76f, 0 0 10px #bfa76f;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .vip-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 60px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #bfa76f;
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #bfa76f, #333) 1;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .vip-button:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+            color: #fff;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-grid img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-grid .text {
+            text-align: left;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-right: 30px;
+        }
+
+        .dancer-img {
+            width: 100%;
+        }
+
+        .dancer_img-container {
+            width: 100%;
+        }
+
+        .modal-grid-dancer {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .text a {
+            width: 70px;
+            height: 70px;
+            border: 1px solid;
+            border-image: linear-gradient(135deg, #222, #999, #444) 1;
+            border-radius: 8px;
+            color: #bfa76f;
+            font-size: 1.4rem;
+            transition: 0.3s;
+            text-decoration: none;
+            text-align: center;
+            margin: 30px;
+            padding: 15px;
+        }
+
+        .text a:hover {
+            color: #fff;
+            text-shadow: 0 0 5px #bfa76f, 0 0 10px #bfa76f;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #dancer_grid-item1 {
+            grid-column: 1 / 5;
+        }
+
+        #dancer_grid-item2 {
+            grid-column: 1 / 5;
+        }
+
+        .modal-headline {
+            text-align: center;
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        #dancer_grid-item3 {
+            grid-column: 1 / 3;
+        }
+
+        #dancer_grid-item4 {
+            grid-column: 3 / 5;
+        }
+
+        #dancer_grid-item5 {
+            grid-column: 1 / 3;
+        }
+
+        #dancer_grid-item6 {
+            grid-column: 3 / 5;
+        }
+
+        #recruit_grid-item1 {
+            grid-column: 1 / 3;
+            font-size: 2.5rem;
+            margin-top: 20px;
+        }
+
+        .recruit-text {
+            font-size: 1.5rem;
+        }
+
+        .recruit-text a {
+            width: 70px;
+            height: 70px;
+            border: 1px solid;
+            border-image: linear-gradient(135deg, #222, #999, #444) 1;
+            border-radius: 8px;
+            color: #bfa76f;
+            font-size: 1.4rem;
+            transition: 0.3s;
+            text-decoration: none;
+            text-align: center;
+            margin: 30px;
+            padding: 15px;
+        }
+
+        .recruit-text a:hover {
+            color: #fff;
+            text-shadow: 0 0 5px #bfa76f, 0 0 10px #bfa76f;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #information_grid-item1 {
+            grid-column: 1 / 3;
+        }
+
+        #home-content {
+            color: white;
+            text-align: center;
+            max-width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 1em;
+            border-radius: 8px;
+
+            /* 背景画像を追加 */
+            background-image: url(photo/floor3.jpeg);
+            background-size: cover;
+            /* 全体にフィットさせる */
+            background-position: center;
+            /* 中央に配置 */
+            background-repeat: no-repeat;
+            /* 繰り返さない */
+
+            /* 文字を読みやすくするための背景色と透過（必要なら） */
+            background-color: rgba(0, 0, 0, 0.6);
+            /* 黒の半透明を上に重ねる */
+            background-blend-mode: overlay;
+        }
+
+        .home-text {
+            display: flex;
+            align-items: center;
+            /* ← 縦方向の中央揃え */
+            justify-content: center;
+            /* ← 横方向の中央揃え（必要なら） */
+            text-align: center;
+            /* ← テキスト中央揃え（必要なら） */
+            grid-column: 1 / 5;
+            height: 80vh;
+            font-size: 1.5rem;
+            margin: 0px 100px;
+        }
+
+        #system-content {
+            color: white;
+            text-align: center;
+            max-width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 1em;
+            border-radius: 8px;
+
+            /* 背景画像を追加 */
+            background-image: url(photo/floor8.jpg);
+            background-size: cover;
+            /* 全体にフィットさせる */
+            background-position: center;
+            /* 中央に配置 */
+            background-repeat: no-repeat;
+            /* 繰り返さない */
+
+            /* 文字を読みやすくするための背景色と透過（必要なら） */
+            background-color: rgba(0, 0, 0, 0.6);
+            /* 黒の半透明を上に重ねる */
+            background-blend-mode: overlay;
+        }
+
+        #vip-content {
+            color: white;
+            text-align: center;
+            max-width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 1em;
+            border-radius: 8px;
+
+            /* 背景画像を追加 */
+            background-image: url(photo/vip3.jpeg);
+            background-size: cover;
+            /* 全体にフィットさせる */
+            background-position: center;
+            /* 中央に配置 */
+            background-repeat: no-repeat;
+            /* 繰り返さない */
+
+            /* 文字を読みやすくするための背景色と透過（必要なら） */
+            background-color: rgba(0, 0, 0, 0.6);
+            /* 黒の半透明を上に重ねる */
+            background-blend-mode: overlay;
+        }
+
+        #access-content {
+            color: white;
+            text-align: center;
+            max-width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 1em;
+            border-radius: 8px;
+
+            /* 背景画像を追加 */
+            background-image: url(photo/nikka.webp);
+            background-size: cover;
+            /* 全体にフィットさせる */
+            background-position: center;
+            /* 中央に配置 */
+            background-repeat: no-repeat;
+            /* 繰り返さない */
+
+            /* 文字を読みやすくするための背景色と透過（必要なら） */
+            background-color: rgba(0, 0, 0, 0.6);
+            /* 黒の半透明を上に重ねる */
+            background-blend-mode: overlay;
+        }
+
+        #information-content {
+            color: white;
+            text-align: center;
+            max-width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 1em;
+            border-radius: 8px;
+
+            /* 背景画像を追加 */
+            background-image: url(photo/floor9.jpg);
+            background-size: cover;
+            /* 全体にフィットさせる */
+            background-position: center;
+            /* 中央に配置 */
+            background-repeat: no-repeat;
+            /* 繰り返さない */
+
+            /* 文字を読みやすくするための背景色と透過（必要なら） */
+            background-color: rgba(0, 0, 0, 0.6);
+            /* 黒の半透明を上に重ねる */
+            background-blend-mode: overlay;
+        }
+
+        #dj-content {
+            color: white;
+            text-align: center;
+            max-width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 1em;
+            border-radius: 8px;
+
+            /* 背景画像を追加 */
+            background-image: url(photo/everyone.JPG);
+            background-size: cover;
+            /* 全体にフィットさせる */
+            background-position: center;
+            /* 中央に配置 */
+            background-repeat: no-repeat;
+            /* 繰り返さない */
+
+            /* 文字を読みやすくするための背景色と透過（必要なら） */
+            background-color: rgba(0, 0, 0, 0.6);
+            /* 黒の半透明を上に重ねる */
+            background-blend-mode: overlay;
+        }
+
+        #dancer-content {
+            color: white;
+            text-align: center;
+            max-width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 1em;
+            border-radius: 8px;
+
+            /* 背景画像を追加 */
+            background-image: url(photo/dancer2.jpg);
+            background-size: cover;
+            /* 全体にフィットさせる */
+            background-position: center;
+            /* 中央に配置 */
+            background-repeat: no-repeat;
+            /* 繰り返さない */
+
+            /* 文字を読みやすくするための背景色と透過（必要なら） */
+            background-color: rgba(0, 0, 0, 0.6);
+            /* 黒の半透明を上に重ねる */
+            background-blend-mode: overlay;
+        }
+
+        #recruit-content {
+            color: white;
+            text-align: center;
+            max-width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 1em;
+            border-radius: 8px;
+
+            /* 背景画像を追加 */
+            background-image: url(photo/vip4.jpeg);
+            background-size: cover;
+            /* 全体にフィットさせる */
+            background-position: center;
+            /* 中央に配置 */
+            background-repeat: no-repeat;
+            /* 繰り返さない */
+
+            /* 文字を読みやすくするための背景色と透過（必要なら） */
+            background-color: rgba(0, 0, 0, 0.6);
+            /* 黒の半透明を上に重ねる */
+            background-blend-mode: overlay;
+        }
+
+        .modal-content img {
+            border: solid 1px #fff;
+        }
+
+        .title-color {
+            color: #00ffff;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="hexCanvas"></canvas>
+    <div id="modal-overlay"></div>
+
+    <header class="global-header">
+        <nav>
+
+            <ul class="nav-menu">
+                <li><a href="#home">HOME</a></li>
+                <li><a href="#system">SYSTEM</a></li>
+                <li><a href="#vip">VIP</a></li>
+                <li><a href="#access">Access</a></li>
+                <li class="logo">
+                    <img src="photo/utage-logo.svg" alt="">
+                </li>
+                <li><a href="#information">Information</a></li>
+                <li><a href="#dj">DJs</a></li>
+                <li><a href="#dancer">Dancers</a></li>
+                <li><a href="#recruit">Recruit</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="scroll-container" id="scroll-container">
+        <section class="item section1" data-detail="1" id="home">
+            <div class="section-container">
+                <h1 class="neon-title">HOKKAIDO <br> NO.1 NIGHT CLUB</h1>
+
+                <div>
+                    <img src="photo/utage-logo.svg" alt="logo" class="home-img">
+                </div>
+
+                <!-- <p>
+                    現在の北海道のクラブシーンを代表するナイトクラブ「UTAGE SAPPORO」。
+                    「#北海道1人気のクラブ #北海道1話題のクラブ
+                    #北海道1盛り上がるクラブ」全てが北海道NO.1！毎週豪華ゲスト出演の他、ダンサーによる華やかなパフォーマンス、最新鋭の照明音響設備で最高のエンターテインメントを演出！
+                    人気のため予約必須のVIPルームもオススメ！
+                </p> -->
+            </div>
+        </section>
+        <section class="item section2" data-detail="2" id="system">
+            <h2 class="section-title">
+                Sy<span class="title-color">s</span>t<span class="title-color">e</span>m
+            </h2>
+        </section>
+        <section class="item section3" data-detail="3" id="vip">
+            <h2 class="section-title">
+                <span class="title-color">V</span>I<span class="title-color">P</span>
+            </h2>
+        </section>
+        <section class="item section4" data-detail="4" id="access">
+            <h2 class="section-title">
+                Acce<span class="title-color">ss</span>
+            </h2>
+        </section>
+        <section class="item section5" data-detail="5" id="information">
+            <h2 class="section-title">
+                <span class="title-color">I</span>nfor<span class="title-color">m</span>atio<span
+                    class="title-color">n</span>
+            </h2>
+        </section>
+        <section class="item section6" data-detail="6" id="dj">
+            <h2 class="section-title">
+                DJ<span class="title-color">s</span>
+            </h2>
+        </section>
+        <section class="item section7" data-detail="7" id="dancer">
+            <h2 class="section-title">
+                <span class="title-color">D</span>ancer<span class="title-color">s</span>
+            </h2>
+        </section>
+        <section class="item section8" data-detail="8" id="recruit">
+            <h2 class="section-title">
+                Re<span class="title-color">cru</span>it
+            </h2>
+        </section>
+    </div>
+
+    <div class="dot-indicator">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+
+
+    <!-- モーダル -->
+    <div class="modal" id="modal1">
+        <button class="close-btn">×</button>
+        <div class="modal-content" id="home-content">
+            <div class="modal-grid-dancer">
+                <div class="home-text">
+                    <p>
+                        現在の北海道のクラブシーンを代表するナイトクラブ「UTAGE SAPPORO」。
+                        「#北海道1人気のクラブ #北海道1話題のクラブ
+                        #北海道1盛り上がるクラブ」全てが北海道NO.1！毎週豪華ゲスト出演の他、ダンサーによる華やかなパフォーマンス、最新鋭の照明音響設備で最高のエンターテインメントを演出！
+                        人気のため予約必須のVIPルームもオススメ！
+                    </p>
+                </div>
+
+                <h3 class="modal-headline" id="dancer_grid-item2">
+                    Party Snap
+                </h3>
+                <div class="dancer_img-container"><img src="photo/home5.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home6.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home7.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home8.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home9.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home10.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home12.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home13.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home14.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home15.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home16.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home17.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home18.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home19.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home20.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/home21.jpg" alt="" class="dancer-img"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- system -->
+
+    <div class="modal" id="modal2">
+        <button class="close-btn">×</button>
+        <div class="modal-content" id="system-content">
+            <h3 class="modal-headline" id="dancer_grid-item1">
+                System
+            </h3>
+
+            <div class="modal-grid-dancer">
+                <div class="dancer_img-container">
+                    <img src="photo/system.jpg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    <b>【平日】 日-木曜日</b> <br><br>
+                    Open-0:00 まで飲み放題 <br><br>
+                    男性：￥800- <br>
+                    女性：￥Free <br><br>
+                    0:00-close (飲み放題無し) <br><br>
+                    男性：￥2,000- (1D) <br>
+                    女性：￥Free <br><br>
+
+                    頂戴致します。
+                </p>
+                <div class="dancer_img-container">
+                    <img src="photo/system2.jpg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    <b>【休日】 金・土曜日・祝前日</b> <br><br>
+                    Open-0:00 まで飲み放題 <br><br>
+                    男性：￥1,000- <br>
+                    女性：￥Free <br><br>
+                    0:00-4:00 (飲み放題無し) <br><br>
+                    男性：￥3,000- (1D) <br>
+                    女性：￥1,500- <br><br>
+                    4:00-close (飲み放題無し) <br><br>
+                    男性：￥2,000 <br>
+                    女性：￥Free <br><br>
+
+                    頂戴致します。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- vip -->
+
+    <div class="modal" id="modal3">
+        <button class="close-btn">×</button>
+        <div class="modal-content" id="vip-content">
+            <h3 class="modal-headline" id="dancer_grid-item1">
+                VIP
+            </h3>
+
+            <div class="modal-grid-dancer">
+                <div class="dancer_img-container">
+                    <img src="photo/vipmenu.jpeg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    日-木曜日はA,B,Csetいずれも選択可能です。<br>
+                    金・土曜日・祝前日はAsetのみ選択可能です。<br>
+                    表示価格よりサービス料10％を追加で頂戴致します。 <br>
+                    予約の状況により延長が出来ない場合が御座います。ご了承ください。
+                </p>
+                <div class="dancer_img-container">
+                    <img src="photo/vipmenu2.jpeg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    OpenからAM 0:00 まではHappy Hourがお得！
+                    是非ご利用下さい！
+                </p>
+                <h3 class="modal-headline" id="dancer_grid-item2">
+                    Drink Menu
+                </h3>
+                <div class="dancer_img-container"><img src="photo/menu1.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu2.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu3.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu4.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu5.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu6.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu7.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu8.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu9.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu10.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu11.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu12.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu13.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu14.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/menu15.jpg" alt="" class="dancer-img"></div>
+            </div>
+        </div>
+    </div>
+    <!-- access -->
+    <div class="modal" id="modal4">
+        <button class="close-btn">×</button>
+        <div class="modal-content" id="access-content">
+            <div class="modal-grid">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7067.523370963591!2d141.35600566693788!3d43.05359555592123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5f0b29f2acdc23b1%3A0xc6934b12213c5ea0!2sUTAGE%20SAPPORO!5e0!3m2!1sja!2sjp!4v1754510753927!5m2!1sja!2sjp"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <p class="text">
+                    地下鉄 南北線 すすきの駅 徒歩3分 <br>
+                    地下鉄 東豊線 豊水すすきの駅 徒歩5分 <br><br>
+
+                    【〒064-0805】 <br>
+                    北海道札幌市中央区南５条西３丁目６−１ <br>
+                    札幌東宝公楽ビル B1F <br><br>
+
+                    【TEL】<br>
+                    011-211-6918 <br>
+
+                    【FAX】<br>
+                    011-211-6919 <br>
+
+                    【MAIL】<br>
+                    info@utagecontact.com
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- information -->
+
+    <div class="modal" id="modal5">
+        <button class="close-btn">×</button>
+        <div class="modal-content" id="information-content">
+            <div class="modal-grid">
+                <h3 class="modal-headline" id="information_grid-item1">
+                    Special Guest
+                </h3>
+                <div>
+                    <img src="photo/foy.jpg" alt="">
+                </div>
+                <p class="text">
+                    【DJ? Foy】<br>
+
+                    【Repezen Foxx】の元メンバーで、現在は音楽活動と並行してゲーミングチーム「NOEZ FOXX」のオーナーも務めるなど多くの話題を集めるDJ?
+                    Foy。多くのお客様のリクエストにお応えし、UTAGE SAPPOROに登場！唯一無二のステージングをお見逃しなく！
+
+                    ※出演時間は当日出演1時間前に店舗のSNSにて発表させて頂きます。予めご了承ください。
+
+                    ※お問い合わせはお店のSNSもしくは下記メールアドレス宛てにお願い致します。出演者関係者への直接のお問い合わせはご遠慮ください。
+                    info@utagecontact.com
+                </p>
+                <div>
+                    <img src="photo/vingo.jpg" alt="">
+                </div>
+                <p class="text">
+                    【Vingo】<br>
+
+                    BAD HOP解散後の" Vingo"が『ENTER THE VINNY LAND TOUR』でUTAGE SAPPOROに登場！お楽しみに！
+
+                    "Vingo"
+
+                    1996年生まれ。東京都出身。
+                    昨年2月のBAD HOP解散以降、各メンバーのソロ活動も活発化する中、ソロキャリアをスタートし3月に1stシングル『楽笑』をリリース。
+                    そして4月に待望の1stソロアルバム『VINNY』をリリース。
+                    RAGEビートを軸に、BAD HOP時代からさらに進化した自らのスタイルを確立する一作となっている。
+                </p>
+                <div>
+                    <img src="photo/elly.jpg" alt="">
+                </div>
+                <p class="text">
+                    【ELLY/ CB　(J SOUL BROTHERS Ⅲ)】<br>
+                    【SWAY】<br>
+
+                    三代目J SOUL BROTHERSのパフォーマー、ヒップホップアーティストとして多彩な才能を発揮し、高いクリエイティブ力を発揮し続けるELLY。
+
+                    さらに、DOBERMAN INFINITYのMC、劇団EXILEのメンバーとして活動中のSWAYがUTAGE SAPPOROに初登場!!
+                </p>
+                <div>
+                    <img src="photo/daddy.jpg" alt="">
+                </div>
+                <p class="text">
+                    【西山ダディダディ】<br>
+
+                    TikTokに突如現れ、大バズりし世界をざわつかせた男"西山ダディダディ"がUTAGE SAPPOROに初登場！お楽しみに！
+
+                    "西山ダディダディ"
+
+                    新卒で大手上場企業に入社後、広告代理店に転職しその後リクルートに入社。28歳でバー業界に入り、独自のエンターテインメントスタイルを確立。2023年10月に六本木「GIFT
+                    Roppongi」オープン。「西山ダディダディ」の名で特徴的なダンスパフォーマンスがTikTokで世界的にバイラルヒットし、現在SNSの総フォロワー数は43万人を超える。
+                    2025年3月に「GIFT Roppongi」を卒業。
+                    2025年4月27日に1stシングル『Daddy’s Style ‐今夜はダディダディ‐』をリリース。
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- DJs -->
+    <div class="modal" id="modal6">
+        <button class="close-btn">×</button>
+        <div class="modal-content" id="dj-content">
+            <h3 class="modal-headline" id="dancer_grid-item1">
+                DJs
+            </h3>
+
+            <div class="modal-grid-dancer">
+                <div class="dancer_img-container">
+                    <img src="photo/jingiskan1.jpg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    【ジンギスカン】<br><br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx<br><br><br><br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </p>
+                <div class="dancer_img-container">
+                    <img src="photo/doraco.jpg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    【DORACO】<br><br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx <br>
+                    xxxxxxxxxxxxxxxxxx<br><br><br><br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </p>
+                <div class="dancer_img-container">
+                    <img src="photo/sugar5.jpg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    【Sugar】<br><br>
+                    xxxxxxxxxxxxxxxxxx <br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx<br><br><br><br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </p>
+                <div class="dancer_img-container">
+                    <img src="photo/shota2.jpg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    【SHOTA】<br><br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx<br><br><br><br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </p>
+                <div class="dancer_img-container">
+                    <img src="photo/koa1.jpg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    【KOA】<br><br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx<br><br><br><br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </p>
+                <div>
+                    <img src="photo/mau2.jpg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    【MAU】 <br><br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx <br><br><br><br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </p>
+                <h3 class="modal-headline" id="dancer_grid-item2">
+                    Gallery
+                </h3>
+                <div class="dancer_img-container"><img src="photo/shota1.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/sugar3.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/dj8.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/dj6.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container" id="dancer_grid-item3">
+                    <img src="photo/dj1.jpg" alt="" class="dancer-img">
+                </div>
+                <div class="dancer_img-container" id="dancer_grid-item4">
+                    <img src="photo/dj2.jpg" alt="" class="dancer-img">
+                </div>
+                <div class="dancer_img-container" id="dancer_grid-item5">
+                    <img src="photo/dj3.jpg" alt="" class="dancer-img">
+                </div>
+                <div class="dancer_img-container" id="dancer_grid-item6">
+                    <img src="photo/dj4.jpg" alt="" class="dancer-img">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Dancers -->
+    <div class="modal" id="modal7">
+        <button class="close-btn">×</button>
+        <div class="modal-content" id="dancer-content">
+            <h3 class="modal-headline" id="dancer_grid-item1">
+                Dancers
+            </h3>
+
+            <div class="modal-grid-dancer">
+                <div class="dancer_img-container">
+                    <img src="photo/yuzuki3.jpg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    【ゆずき】<br><br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx <br>
+                    xxxxxxxxxxxxxxxxxx<br><br><br><br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </p>
+                <div class="dancer_img-container">
+                    <img src="photo/remi3.jpg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    【れみ】<br><br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx <br>
+                    xxxxxxxxxxxxxxxxxx<br><br><br><br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </p>
+                <div class="dancer_img-container">
+                    <img src="photo/fuyuka.jpeg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    【ふゆか】<br><br>
+                    xxxxxxxxxxxxxxxxxx <br>
+                    xxxxxxxxxxxxxxxxxx <br>
+                    xxxxxxxxxxxxxxxxxx<br><br><br><br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </p>
+                <div class="dancer_img-container">
+                    <img src="photo/fuka.jpeg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    【ふうか】<br><br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx <br><br><br><br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </p>
+                <div class="dancer_img-container">
+                    <img src="photo/miyu.jpeg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    【みゆ】<br><br>
+                    xxxxxxxxxxxxxxxxxx<br>
+                    xxxxxxxxxxxxxxxxxx <br>
+                    xxxxxxxxxxxxxxxxxx<br><br><br><br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </p>
+                <div>
+                    <img src="photo/tanaka.jpg" alt="" class="dancer-img">
+                </div>
+                <p class="text">
+                    【田中】<br><br>
+                    今は坊主です<br>
+                    今は坊主です<br>
+                    今は坊主です<br><br><br><br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </p>
+                <h3 class="modal-headline" id="dancer_grid-item2">
+                    Gallery
+                </h3>
+                <div class="dancer_img-container"><img src="photo/dancer3.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/dancer4.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/dancer9.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container"><img src="photo/dancer7.jpg" alt="" class="dancer-img"></div>
+                <div class="dancer_img-container" id="dancer_grid-item3">
+                    <img src="photo/dancer6.jpg" alt="" class="dancer-img">
+                </div>
+                <div class="dancer_img-container" id="dancer_grid-item4">
+                    <img src="photo/dancer8.jpg" alt="" class="dancer-img">
+                </div>
+                <div class="dancer_img-container" id="dancer_grid-item5">
+                    <img src="photo/dancer10.jpg" alt="" class="dancer-img">
+                </div>
+                <div class="dancer_img-container" id="dancer_grid-item6">
+                    <img src="photo/dancer11.jpg" alt="" class="dancer-img">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Recruit -->
+    <div class="modal" id="modal8">
+        <button class="close-btn">×</button>
+        <div class="modal-content" id="recruit-content">
+            <div class="modal-grid">
+                <h3 class="modal-headline" id="recruit_grid-item1">
+                    UTAGE SAPPOROは一緒に働く仲間を募集しています。
+                </h3>
+                <div>
+                    <img src="photo/recruit.jpg" alt="">
+                </div>
+                <div>
+                    <img src="photo/recruit2.jpg" alt="">
+                </div>
+                <div>
+                    <img src="photo/recruit3.jpg" alt="">
+                </div>
+                <p class="recruit-text">
+                    ご興味のある方は当社Instagram <br>
+                    又は電話番号へ連絡お願い致します。<br><br>
+                    【TEL】 <br>
+                    011-211-6918 <br><br>
+                    採用担当：【三品】 <br><br>
+                    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="social-column">
+        <a href="https://www.instagram.com" target="_blank" title="Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://twitter.com" target="_blank" title="X（旧Twitter）">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#bfa76f" width="24" height="24">
+                <path
+                    d="M370.6 32H470L304.7 231.6 500 480H351.5L234.2 324.5 100.6 480H0L177.3 267.5 0 32H153.7L260.6 171.9 370.6 32z" />
+            </svg>
+        </a>
+
+        <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+            <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="#vip-reservation" class="vip-button" title="VIP予約">
+            VIP
+        </a>
+    </div>
+
+
+
+    <script>
+        const scrollContainer = document.getElementById('scroll-container');
+        const totalSections = 8;
+        let targetIndex = 0;
+        let currentTranslateX = 0;
+        let targetTranslateX = 0;
+        let isAnimating = false;
+        let isModalOpen = false;
+
+        // 横スクロール用アニメーション
+        function animateScroll() {
+            if (!isAnimating) return;
+
+            currentTranslateX += (targetTranslateX - currentTranslateX) * 0.1;
+            scrollContainer.style.transform = `translateX(${currentTranslateX}px)`;
+
+            if (Math.abs(targetTranslateX - currentTranslateX) < 0.5) {
+                scrollContainer.style.transform = `translateX(${targetTranslateX}px)`;
+                isAnimating = false;
+                return;
+            }
+            requestAnimationFrame(animateScroll);
+        }
+
+        let wheelDeltaSum = 0;
+        const threshold = 100;
+
+        window.addEventListener('wheel', e => {
+            if (isModalOpen) return;
+            e.preventDefault(); // 必ず passive: false が必要
+            if (isAnimating) return;
+
+            wheelDeltaSum += e.deltaY;
+
+            if (wheelDeltaSum > threshold) {
+                if (targetIndex < totalSections - 1) {
+                    targetIndex++;
+                    targetTranslateX = -targetIndex * window.innerWidth;
+                    isAnimating = true;
+                    setActiveDot(targetIndex);
+                    animateScroll();
+                }
+                wheelDeltaSum = 0;
+            } else if (wheelDeltaSum < -threshold) {
+                if (targetIndex > 0) {
+                    targetIndex--;
+                    targetTranslateX = -targetIndex * window.innerWidth;
+                    isAnimating = true;
+                    setActiveDot(targetIndex);
+                    animateScroll();
+                }
+                wheelDeltaSum = 0;
+            }
+        }, {
+            passive: false
+        });
+
+        // モーダル操作
+        const items = document.querySelectorAll(".item");
+        const closeBtns = document.querySelectorAll(".close-btn");
+
+        function disableBackgroundInteraction() {
+            document.body.style.overflow = "hidden";
+
+            const blocker = document.createElement("div");
+            blocker.id = "click-blocker";
+            blocker.style.position = "fixed";
+            blocker.style.top = 0;
+            blocker.style.left = 0;
+            blocker.style.width = "100vw";
+            blocker.style.height = "100vh";
+            blocker.style.zIndex = "1999";
+            blocker.style.background = "transparent";
+            document.body.appendChild(blocker);
+        }
+
+        function enableBackgroundInteraction() {
+            document.body.style.overflow = "auto";
+            const blocker = document.getElementById("click-blocker");
+            if (blocker) blocker.remove();
+        }
+
+        items.forEach(item => {
+            item.addEventListener("click", () => {
+                const index = item.getAttribute("data-detail");
+                const modal = document.getElementById(`modal${index}`);
+                modal.classList.add("show");
+                isModalOpen = true;
+                disableBackgroundInteraction();
+            });
+        });
+
+        closeBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const modal = btn.closest(".modal");
+                modal.classList.remove("show");
+                isModalOpen = false;
+                enableBackgroundInteraction();
+            });
+        });
+
+
+        // ドットインジケーター
+
+        const dots = document.querySelectorAll('.dot');
+
+        function setActiveDot(index) {
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+
+        // particle
+
+        const canvas = document.getElementById('hexCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        class Hexagon {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 30 + 10;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.speed = (Math.random() - 0.5) * 0.01;
+                this.opacity = Math.random() * 0.3 + 0.2;
+                this.dx = (Math.random() - 0.5) * 0.5;
+                this.dy = (Math.random() - 0.5) * 0.5;
+            }
+
+            update() {
+                this.rotation += this.speed;
+                this.x += this.dx;
+                this.y += this.dy;
+
+                // 画面外に出たらリセット
+                if (this.x < -50 || this.x > width + 50 || this.y < -50 || this.y > height + 50) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const angle = (Math.PI / 3) * i;
+                    const x = this.size * Math.cos(angle);
+                    const y = this.size * Math.sin(angle);
+                    ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.strokeStyle = `rgba(0, 255, 255, ${this.opacity})`;
+                ctx.lineWidth = 1.5;
+                ctx.shadowColor = "cyan";
+                ctx.shadowBlur = 10;
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        const hexagons = [];
+        for (let i = 0; i < 80; i++) {
+            hexagons.push(new Hexagon());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            hexagons.forEach(hex => {
+                hex.update();
+                hex.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+
+
+
+</body>
+
+</html>
