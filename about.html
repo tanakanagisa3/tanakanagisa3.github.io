@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>私について　田中良芽</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="about.css">
+</head>
+
+<body>
+
+    <header id="header">
+        <h1 class="break">
+            <a href="index.html" class="fade-link" id="title-link">田中 良芽の<span class="br">ポートフォリオサイト</span></a>
+        </h1>
+        <ul>
+            <li><a href="" class="fade-link">私について</a></li>
+            <li><a href="index.html#work" class="fade-link">作品</a></li>
+        </ul>
+    </header>
+
+    <main id="main" class="wrapper">
+        <h3 id="about">私について</h3>
+        <section class="about">
+            <div>
+                <img src="img/me.jpg" alt="">
+            </div>
+
+            <p>
+                2024年2月より職業訓練校にてWebデザイナーを志し学習を開始。<br>
+                2025年8月に職業訓練校を卒業。<br>
+                JavaエンジニアとしてRimp株式会社に入社し、10月に退社。<br>
+                現在はフリーランスのWebデザイナーを志しています。<br>
+            </p>
+        </section>
+
+        <h4 id="h4-color">使用可能ソフト</h4>
+
+        <section id="skill" class="wrapper">
+            <div class="dl-text">
+                <dl>
+                    <dt>HTML,CSS</dt>
+                </dl>
+                <dl>
+                    <dt>Photo Shop</dt>
+                </dl>
+                <dl>
+                    <dt>illustrator</dt>
+                </dl>
+            </div>
+
+            <div class="dl-text">
+                <dl>
+                    <dt>FilmoraX</dt>
+                </dl>
+                <dl>
+                    <dt>Premier Pro</dt>
+                </dl>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.querySelectorAll('.fade-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault(); // 遷移止める
+                const url = this.href;
+                document.body.classList.add('fade-out'); // フェード開始
+
+                setTimeout(() => {
+                    window.location.href = url; // 実際に遷移
+                }, 500); // transitionと同じ時間
+            });
+        });
+    </script>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 100); // ← 少しだけ遅らせるとちゃんと transition が効く
+        });
+    </script>
+
+</body>
+
+</html>

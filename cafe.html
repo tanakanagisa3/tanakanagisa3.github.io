@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カフェ　田中良芽</title>
+    <link rel="stylesheet" href="slick.css">
+    <link rel="stylesheet" href="slick-theme.css">
+    <link rel="stylesheet" href="cafe.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="slick.min.js"></script>
+</head>
+
+<body>
+
+    <header id="header" class="wrapper">
+        <h1 class="break">
+            <a href="index.html" class="fade-link" id="title-link">田中 良芽の<span class="br">ポートフォリオサイト</span></a>
+        </h1>
+        <ul>
+            <li><a href="about.html" class="fade-link">私について</a></li>
+            <li><a href="index.html#work" class="fade-link">作品</a></li>
+        </ul>
+
+    </header>
+
+    <section class="wrapper">
+        <div class="first-view" id="img-link">
+            <a href="Tanaka/index.html" class="fade-link" target="_blank">
+                <img src="img/cafe-top.jpeg" alt="">
+            </a>
+        </div>
+    </section>
+
+    <main id="main" class="wrapper">
+        <h2 class="break">カフェ　<span class="br">雨と豆と森</span></h2>
+        <div class="title-text">
+            <p>学校課題</p>
+        </div>
+        <p class="text-margin">HTML及びCSSの学習を開始して一カ月ほど経過し、<br>
+            flexboxまで学習した後の初めての課題制作で作成したサイトです。
+        </p>
+
+        <div class="main-container">
+            <section class="img-container">
+                <ul class="single-item">
+                    <li>
+                        <img src="img/cafe-codawari.jpeg" alt="">
+                    </li>
+                    <li>
+                        <img src="img/cafe-drink.jpeg" alt="">
+                    </li>
+                    <li>
+                        <img src="img/cafe-access.jpeg" alt="">
+                    </li>
+                    <li>
+                        <img src="img/cafe-shop.jpeg" alt="">
+                    </li>
+                </ul>
+            </section>
+            <section class="text-container">
+                <dl>
+                    <div class="dl-detail">
+                        <dt>目的</dt>
+                        <dd>オープンして3年ほど。 <br>
+                            順調だがさらに集客を伸ばしたいので <br>
+                            ホームページを新規で開設したいとの注文。</dd>
+                    </div>
+                    <div class="dl-detail">
+                        <dt>ターゲット</dt>
+                        <dd>客層は幅広く取り込みたいが特に30～40代の男女</dd>
+                    </div>
+
+                    <div class="dl-detail">
+                        <dt>概要</dt>
+                        <dd>・店として古くはないが落ち着く系のCAFE <br>
+                            ・ちょっとした雑貨の販売や <br>
+                            　フェアトレード商品を積極的に扱うお店。<br>
+                            ・高級店ではないがこだわりをもって商品を提供している</dd>
+                    </div>
+
+                    <div class="dl-detail">
+                        <dt>デザイン</dt>
+                        <dd>シンプルで無駄をそぎ落とすことを <br>
+                            意識して制作に取り掛かりました。<br>
+                            また、雨と豆と森という店名の <br>
+                            イメージと合うような背景の画像と <br>
+                            落ち着いた雰囲気のフォント、 <br>
+                            レイアウトでデザインしていきました。
+                        </dd>
+                    </div>
+                </dl>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>
+            <a href="index.html" class="fade-link">TOPへ</a>
+        </p>
+
+        <p>
+            <a href="utage.html" class="fade-link">次の作品へ</a>
+        </p>
+    </footer>
+
+    <script>
+        $('.single-item').slick({
+            autoplay: true,
+            autoplaySpeed: 2000,
+            arrows: true,
+            dots: true,
+            fade: true,
+        });
+    </script>
+
+    <script>
+        // フェードイン（読み込み完了時に実行）
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 10); // 遅延させるのがミソ
+        });
+
+        // フェードアウト（リンクをクリックしたとき）
+        document.querySelectorAll('a').forEach(link => {
+            if (link.getAttribute('target') === '_blank') return; // 別タブは無視
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const url = this.href;
+                document.body.classList.remove('loaded'); // これもあると明示的で良い
+                document.body.classList.add('fade-out');
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 500);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

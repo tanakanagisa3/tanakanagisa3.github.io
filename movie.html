@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動画・サムネイル　田中良芽</title>
+    <link rel="stylesheet" href="slick.css">
+    <link rel="stylesheet" href="slick-theme.css">
+    <link rel="stylesheet" href="movie.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="slick.min.js"></script>
+</head>
+
+<body>
+
+    <header id="header" class="wrapper">
+        <h1 class="break">
+            <a href="index.html" class="fade-link" id="title-link">田中 良芽の<span class="br">ポートフォリオサイト</span></a>
+        </h1>
+        <ul>
+            <li><a href="about.html" class="fade-link">私について</a></li>
+            <li><a href="index.html#work" class="fade-link">作品</a></li>
+        </ul>
+    </header>
+
+    <main id="main" class="wrapper">
+        <h2 class="break">Youtuber時代</h2>
+        <div class="title-text">
+            <p>自主制作</p>
+        </div>
+        <p class="text-margin">
+            2020年から2022年頃までYoutuberを<br>
+            目指していた時期の動画とサムネイルを掲載します。
+        </p>
+
+        <div class="main-container">
+            <section class="img-container">
+                <ul class="single-item">
+                    <li>
+                        <img src="img/zunda.png" alt="">
+                    </li>
+                    <li>
+                        <img src="img/china-real.png" alt="">
+                    </li>
+                    <li>
+                        <img src="img/kiminouso-kai.png" alt="">
+                    </li>
+                    <li>
+                        <img src="img/lucario.png" alt="">
+                    </li>
+                    <li>
+                        <img src="img/idj.png" alt="">
+                    </li>
+                </ul>
+            </section>
+            <section class="text-container">
+                <dl>
+                    <div class="dl-detail">
+                        <dt>概要</dt>
+                        <dd>
+                            中国の画像2枚とピアノの画像は先日作成したものです。<br>
+                            他の2枚は当時作成していた動画のサムネイルです。<br>
+                            下記に当時作成した動画のリンクを記載します。<br>
+                            正直お恥ずかしいですが、もしお時間があればご覧頂きたいです。<br>
+                            動画編集に関しては当時Filmora9やPhotoscape <br>
+                            という無料ソフトを使用していましたが、<br>
+                            現在はPhoto shopとPremier proを使用しています。<br>
+                            ポートフォリオは作成出来ませんでしたが、<br>
+                            illustratorでの<br>
+                            ロゴ・バナー・ポスター・名刺などの制作も可能です。<br>
+                            職業訓練校時代に作成していた作品は失くしてしまいました。<br>
+                        </dd>
+                    </div>
+                    <div class="dl-detail">
+                        <dt>リンク</dt>
+                        <dd>
+                            <p>ルカリオ.exe(4枚目のサムネイルの動画)</p>
+                            <p>
+                                <a href="https://www.youtube.com/watch?v=TmuMAIGcaHE" target="_blank">
+                                    https://www.youtube.com/watch?v=TmuMAIGcaHE
+                                </a>
+                            </p>
+                            <p>【手元あり】IDJ徹底解説！興味ある人、良くわからない人必見！！【スマブラSP】</p>
+                            <p>
+                                <a href="https://www.youtube.com/watch?v=NsBEJeINu5o" target="_blank">
+                                    https://www.youtube.com/watch?v=NsBEJeINu5o
+                                </a>
+                            </p>
+                            <p>【スマブラSP】サムスじゃんけんはクソ #Shorts</p>
+                            <p>
+                                <a href="https://www.youtube.com/shorts/0_pFVsJLCZE" target="_blank">
+                                    https://www.youtube.com/shorts/0_pFVsJLCZE
+                                </a>
+                            </p>
+                        </dd>
+                    </div>
+                </dl>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>
+            <a href="utage.html" class="fade-link">前の作品へ</a>
+        </p>
+
+        <p>
+            <a href="index.html" class="fade-link">TOPへ</a>
+        </p>
+    </footer>
+
+    <script>
+        $('.single-item').slick({
+            autoplay: true,
+            autoplaySpeed: 2000,
+            arrows: true,
+            dots: true,
+            fade: true,
+        });
+    </script>
+
+    <script>
+        // フェードイン（読み込み完了時に実行）
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 10); // 遅延させるのがミソ
+        });
+
+        // フェードアウト（リンクをクリックしたとき）
+        document.querySelectorAll('a').forEach(link => {
+            if (link.getAttribute('target') === '_blank') return; // 別タブは無視
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const url = this.href;
+                document.body.classList.remove('loaded'); // これもあると明示的で良い
+                document.body.classList.add('fade-out');
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 500);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>田中 良芽のポートフォリオサイト</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ↓↓loading画面↓↓ -->
+    <!-- <div id="loading" class="loading">
+        <div class="loading__contents">
+            <p class="loading__text">Now loading</p>
+        </div>
+        <div id="loader-bar"></div>
+    </div> -->
+    <!-- ↑↑loading画面↑↑ -->
+
+
+    <div id="content">
+        <header id="header">
+            <h1 class="break">田中 良芽の<span class="br">ポートフォリオサイト</span></h1>
+            <ul>
+                <li><a href="#about">私について</a></li>
+                <li><a href="#work">作品</a></li>
+            </ul>
+        </header>
+        <section class="first-view">
+            <div class="title-animation">
+                <h2 class="break">
+                    宜しく<span class="br">お願いします</span>
+                </h2>
+            </div>
+            <div class="hero-img"></div>
+        </section>
+        <article id="article" class="wrapper">
+            <div class="fade-up">
+                <h3 id="about">私について</h3>
+                <section class="about">
+                    <div>
+                        <img src="img/me.jpg" alt="">
+                    </div>
+                    <p>
+                        2024年2月より職業訓練校にてWebデザイナーを志し学習を開始。<br>
+                        2025年8月に職業訓練校を卒業。<br>
+                        JavaエンジニアとしてRimp株式会社に入社し、10月に退社。<br>
+                        現在はフリーランスのWebデザイナーを志しています。<br>
+                    </p>
+                </section>
+                <p class="about-text">
+                    <a href="about.html" class="fade-link">View more</a>
+                </p>
+            </div>
+        </article>
+        <main id="main" class="wrapper">
+            <div class="fade-up">
+                <h3 id="work">作品</h3>
+                <section id="hp" class="wrapper">
+                    <h4>HP, LP</h4>
+            </div>
+            <div class="fade-up">
+                <div class="hp-container">
+                    <p class="item1"><img src="img/cafe-top.jpeg" alt=""></p>
+                    <p class="item2"><img src="img/cafe-codawari.jpeg" alt=""></p>
+                    <p class="item3"><img src="img/cafe-drink.jpeg" alt=""></p>
+                    <p class="item4"><img src="img/cafe-access.jpeg" alt=""></p>
+                    <p class="item5"><img src="img/cafe-shop.jpeg" alt=""></p>
+                    <dl class="item6">
+                        <dt>カフェ　雨と豆と森</dt>
+                        <dd>Webサイト 学校課題</dd>
+                    </dl>
+                    <p class="item7">
+                        <a href="cafe.html" target="_blank" class="fade-link">View More</a>
+                    </p>
+                </div>
+            </div>
+            <div class="fade-up">
+                <div class="hp-container2">
+                    <p class="item1"><img src="img/utage-top.png" alt=""></p>
+                    <p class="item2"><img src="img/utage-system.png" alt=""></p>
+                    <p class="item3"><img src="img/utage-vip.png" alt=""></p>
+                    <p class="item4"><img src="img/utage-access.png" alt=""></p>
+                    <p class="item5"><img src="img/utage-modal.png" alt=""></p>
+                    <dl class="item6">
+                        <dt>UTAGE SAPPORO</dt>
+                        (ナイトクラブ)
+                        <dd>Webサイト 自主制作</dd>
+                    </dl>
+                    <p class="item7">
+                        <a href="utage.html" target="_blank" class="fade-link">View More</a>
+                    </p>
+                </div>
+            </div>
+            <div class="fade-up">
+                <h4>動画・サムネイル</h4>
+            </div>
+            <div class="fade-up">
+                <div class="hp-container">
+                    <p class="item1"><img src="img/zunda.png" alt=""></p>
+                    <p class="item2"><img src="img/china-real.png" alt=""></p>
+                    <p class="item3"><img src="img/kiminouso.png" alt=""></p>
+                    <p class="item4"><img src="img/lucario.png" alt=""></p>
+                    <p class="item5"><img src="img/idj.png" alt=""></p>
+                    <dl class="item6">
+                        <dt>Youtuber時代</dt>
+                        <dd>自主制作</dd>
+                    </dl>
+                    <p class="item7">
+                        <a href="movie.html" target="_blank" class="fade-link">View More</a>
+                    </p>
+                </div>
+            </div>
+            </section>
+        </main>
+        <aside id="aside" class="wrapper">
+            <section id="banner" class="wrapper">
+
+            </section>
+        </aside>
+        <footer>
+            <p>田中良芽のポートフォリオ</p>
+        </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- ローディングバー
+
+    <script>
+        $(document).ready(function () {
+            $("#cover").fadeIn(500);
+
+            let progress = 0;
+
+            // ローディングの進行をシミュレート
+            let interval = setInterval(function () {
+                // 本当は読み込みに合わせて変えたいけど、とりあえずシミュレーション
+                if (progress < 90) {
+                    progress += Math.random() * 10; // 伸び方ランダム
+                    $("#loader-bar").css("width", progress + "%");
+                }
+            }, 200);
+
+            // すべて読み込み完了したら
+            $(window).on("load", function () {
+                clearInterval(interval);
+                $("#loader-bar").css("width", "100%");
+
+                setTimeout(function () {
+                    $("#cover").fadeOut(800);
+                    $("#content").fadeIn(800);
+                }, 500); // ちょっと間を置いてからフェードアウト
+            });
+        });
+    </script> -->
+
+
+    <!-- ページ遷移 -->
+
+
+    <script>
+        document.querySelectorAll('.fade-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault(); // 遷移止める
+                const url = this.href;
+                document.body.classList.add('fade-out'); // フェード開始
+
+                setTimeout(() => {
+                    window.location.href = url; // 実際に遷移
+                }, 500); // transitionと同じ時間
+            });
+        });
+    </script>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('loaded');
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 10); // ← わずかに遅らせるのがポイント
+        });
+    </script>
+
+
+    <!-- スクロールでコンテンツがフェードイン -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const fadeUps = document.querySelectorAll('.fade-up');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // 一度表示されたら監視終了
+                    }
+                });
+            }, {
+                threshold: 0.1 // 少しでも表示されたら発火
+            });
+
+            fadeUps.forEach(el => observer.observe(el));
+        });
+    </script>
+
+
+    <!-- ロード画面
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            const loadingElement = document.getElementById('loading');
+            const contentElement = document.getElementById('content');
+
+            // ローディング画面を非表示にして、コンテンツを表示する関数
+            function hideLoading() {
+                loadingElement.style.transition = 'opacity .6s ease, visibility .6s ease';
+                loadingElement.style.opacity = 0;
+                loadingElement.style.visibility = 'hidden';
+
+                // display:none を解除（例：blockにする）
+                contentElement.style.display = 'block';
+            }
+
+            if (!sessionStorage.getItem('firstVisit')) {
+                sessionStorage.setItem('firstVisit', 'true');
+
+                // ローディング後に表示
+                setTimeout(function () {
+                    hideLoading();
+                }, 4000);
+
+            } else {
+                loadingElement.style.display = 'none';
+                contentElement.style.display = 'block';
+            }
+        });
+    </script> -->
+
+</body>
+
+</html>
