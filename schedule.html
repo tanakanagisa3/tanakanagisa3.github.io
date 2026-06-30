@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Meet 時間割</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", "Yu Gothic UI", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+
+        .schedule {
+            display: grid;
+            gap: 18px;
+        }
+
+        .card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            text-decoration: none;
+            color: white;
+
+            padding: 22px 28px;
+
+            border-radius: 18px;
+
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(12px);
+
+            border: 1px solid rgba(255, 255, 255, .2);
+
+            transition: .25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: rgba(255, 255, 255, .2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .35);
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .period {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .time {
+            opacity: .85;
+        }
+
+        .join {
+            background: #00c853;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 999px;
+            font-weight: bold;
+            transition: .2s;
+        }
+
+        .card:hover .join {
+            background: #00e676;
+        }
+
+        @media(max-width:600px) {
+
+            body {
+                padding: 20px;
+            }
+
+            .card {
+                flex-direction: column;
+                gap: 18px;
+                text-align: center;
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>📚 Google Meet 時間割</h1>
+
+        <div class="schedule">
+
+            <a class="card" href="https://meet.google.com/tey-jbju-nen" target="_blank" rel="noopener noreferrer">
+                <div class="info">
+                    <div class="period">1限</div>
+                    <div class="time">09:00 ～ 10:00</div>
+                </div>
+                <div class="join">🎥 Meet</div>
+            </a>
+
+            <a class="card" href="https://meet.google.com/scr-zpiz-ivu" target="_blank" rel="noopener noreferrer">
+                <div class="info">
+                    <div class="period">2限</div>
+                    <div class="time">10:00 ～ 11:00</div>
+                </div>
+                <div class="join">🎥 Meet</div>
+            </a>
+
+            <a class="card" href="https://meet.google.com/xgu-iheh-jmw" target="_blank" rel="noopener noreferrer">
+                <div class="info">
+                    <div class="period">3限</div>
+                    <div class="time">11:00 ～ 12:00</div>
+                </div>
+                <div class="join">🎥 Meet</div>
+            </a>
+
+            <a class="card" href="https://meet.google.com/aft-nddh-jxv" target="_blank" rel="noopener noreferrer">
+                <div class="info">
+                    <div class="period">4限</div>
+                    <div class="time">13:00 ～ 14:00</div>
+                </div>
+                <div class="join">🎥 Meet</div>
+            </a>
+
+            <a class="card" href="https://meet.google.com/zcf-chkj-oiq" target="_blank" rel="noopener noreferrer">
+                <div class="info">
+                    <div class="period">5限</div>
+                    <div class="time">14:00 ～ 15:00</div>
+                </div>
+                <div class="join">🎥 Meet</div>
+            </a>
+
+            <a class="card" href="https://meet.google.com/wtp-oayd-shv" target="_blank" rel="noopener noreferrer">
+                <div class="info">
+                    <div class="period">6限</div>
+                    <div class="time">15:00 ～ 16:00</div>
+                </div>
+                <div class="join">🎥 Meet</div>
+            </a>
+
+            <a class="card" href="https://meet.google.com/noz-agij-cfa" target="_blank" rel="noopener noreferrer">
+                <div class="info">
+                    <div class="period">7限</div>
+                    <div class="time">16:00 ～ 17:00</div>
+                </div>
+                <div class="join">🎥 Meet</div>
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
