@@ -2,192 +2,215 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Meet 時間割</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>📚 Google Meet 時間割</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Segoe UI, Yu Gothic UI, sans-serif
+    }
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", "Yu Gothic UI", sans-serif;
-        }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0b1022, #1d4ed8, #2563eb);
+      padding: 18px;
+      color: #fff
+    }
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
-        }
+    .container {
+      max-width: 1200px;
+      margin: auto
+    }
 
-        .container {
-            width: 100%;
-            max-width: 700px;
-        }
+    h1 {
+      text-align: center;
+      font-size: 2.3rem;
+      margin-bottom: 10px
+    }
 
-        h1 {
-            color: white;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2rem;
-            letter-spacing: 1px;
-        }
+    #status {
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: bold;
+      padding: 12px;
+      border-radius: 14px;
+      margin: 0 auto 18px;
+      max-width: 700px;
+      background: rgba(255, 255, 255, .12)
+    }
 
-        .schedule {
-            display: grid;
-            gap: 18px;
-        }
+    .schedule {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px
+    }
 
-        .card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+    .card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px;
+      border-radius: 22px;
+      text-decoration: none;
+      color: #fff;
+      background: rgba(255, 255, 255, .12);
+      border: 1px solid rgba(255, 255, 255, .2);
+      backdrop-filter: blur(12px);
+      transition: .25s
+    }
 
-            text-decoration: none;
-            color: white;
+    .card:hover {
+      transform: scale(1.03)
+    }
 
-            padding: 22px 28px;
+    .period {
+      font-size: 2rem;
+      font-weight: 700
+    }
 
-            border-radius: 18px;
+    .time {
+      margin-top: 8px;
+      font-size: 1.1rem;
+      opacity: .9
+    }
 
-            background: rgba(255, 255, 255, .12);
-            backdrop-filter: blur(12px);
+    .join {
+      padding: 18px 30px;
+      background: #00c853;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 1.1rem
+    }
 
-            border: 1px solid rgba(255, 255, 255, .2);
+    .active {
+      background: rgba(0, 200, 83, .3) !important;
+      border: 2px solid #00ff84;
+      box-shadow: 0 0 25px #00ff84
+    }
 
-            transition: .25s ease;
-        }
+    .soon {
+      animation: blink 1s infinite;
+      background: rgba(255, 193, 7, .25) !important;
+      border: 2px solid #ffd54f
+    }
 
-        .card:hover {
-            transform: translateY(-4px) scale(1.02);
-            background: rgba(255, 255, 255, .2);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, .35);
-        }
+    .ending {
+      background: rgba(255, 0, 0, .25) !important;
+      border: 2px solid #ff6b6b
+    }
 
-        .info {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
+    .url {
+      font-size: .9rem;
+      color: #cbd5e1;
+      margin: 4px 0 8px;
+      font-family: monospace;
+      letter-spacing: 1px;
+    }
 
-        .period {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
+    @keyframes blink {
+      50% {
+        transform: scale(1.02);
+        opacity: .7
+      }
+    }
 
-        .time {
-            opacity: .85;
-        }
+    @media(max-width:800px) {
+      .schedule {
+        grid-template-columns: 1fr
+      }
 
-        .join {
-            background: #00c853;
-            color: white;
-            padding: 12px 22px;
-            border-radius: 999px;
-            font-weight: bold;
-            transition: .2s;
-        }
-
-        .card:hover .join {
-            background: #00e676;
-        }
-
-        @media(max-width:600px) {
-
-            body {
-                padding: 20px;
-            }
-
-            .card {
-                flex-direction: column;
-                gap: 18px;
-                text-align: center;
-            }
-
-        }
-    </style>
-
+      .card {
+        flex-direction: column;
+        gap: 18px;
+        text-align: center
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="container">
+    <h1>📚 Google Meet 時間割</h1>
+    <div id="status">読込中...</div>
+    <div class="schedule" id="schedule"></div>
+  </div>
+  <script>
+    const lessons = [
+      ["1限", "09:00", "10:00", "https://meet.google.com/tey-jbju-nen"],
+      ["5限", "14:00", "15:00", "https://meet.google.com/zcf-chkj-oiq"],
+      ["2限", "10:00", "11:00", "https://meet.google.com/scr-zpiz-ivu"],
+      ["6限", "15:00", "16:00", "https://meet.google.com/wtp-oayd-shv"],
+      ["3限", "11:00", "12:00", "https://meet.google.com/xgu-iheh-jmw"],
+      ["7限", "16:00", "17:00", "https://meet.google.com/noz-agij-cfa"],
+      ["4限", "13:00", "14:00", "https://meet.google.com/aft-nddh-jxv"],
+      ["8限", "17:00", "18:00", "https://meet.google.com/ttn-evje-ims"]
+    ];
+    const sc = document.getElementById("schedule");
+    lessons.forEach(l => {
 
-    <div class="container">
+      const meetCode = l[3].replace("https://meet.google.com/", "");
 
-        <h1>📚 Google Meet 時間割</h1>
-
-        <div class="schedule">
-
-            <a class="card" href="https://meet.google.com/tey-jbju-nen" target="_blank" rel="noopener noreferrer">
-                <div class="info">
-                    <div class="period">1限 "https://meet.google.com/tey-jbju-nen"</div>
-                    <div class="time">09:00 ～ 10:00</div>
-                </div>
-                <div class="join">🎥 Meet</div>
-            </a>
-
-            <a class="card" href="https://meet.google.com/scr-zpiz-ivu" target="_blank" rel="noopener noreferrer">
-                <div class="info">
-                    <div class="period">2限 "https://meet.google.com/scr-zpiz-ivu"</div>
-                    <div class="time">10:00 ～ 11:00</div>
-                </div>
-                <div class="join">🎥 Meet</div>
-            </a>
-
-            <a class="card" href="https://meet.google.com/xgu-iheh-jmw" target="_blank" rel="noopener noreferrer">
-                <div class="info">
-                    <div class="period">3限 "https://meet.google.com/xgu-iheh-jmw"</div>
-                    <div class="time">11:00 ～ 12:00</div>
-                </div>
-                <div class="join">🎥 Meet</div>
-            </a>
-
-            <a class="card" href="https://meet.google.com/aft-nddh-jxv" target="_blank" rel="noopener noreferrer">
-                <div class="info">
-                    <div class="period">4限 "https://meet.google.com/aft-nddh-jxv"</div>
-                    <div class="time">13:00 ～ 14:00</div>
-                </div>
-                <div class="join">🎥 Meet</div>
-            </a>
-
-            <a class="card" href="https://meet.google.com/zcf-chkj-oiq" target="_blank" rel="noopener noreferrer">
-                <div class="info">
-                    <div class="period">5限 "https://meet.google.com/zcf-chkj-oiq"</div>
-                    <div class="time">14:00 ～ 15:00</div>
-                </div>
-                <div class="join">🎥 Meet</div>
-            </a>
-
-            <a class="card" href="https://meet.google.com/wtp-oayd-shv" target="_blank" rel="noopener noreferrer">
-                <div class="info">
-                    <div class="period">6限 "https://meet.google.com/wtp-oayd-shv"</div>
-                    <div class="time">15:00 ～ 16:00</div>
-                </div>
-                <div class="join">🎥 Meet</div>
-            </a>
-
-            <a class="card" href="https://meet.google.com/noz-agij-cfa" target="_blank" rel="noopener noreferrer">
-                <div class="info">
-                    <div class="period">7限 "https://meet.google.com/noz-agij-cfa"</div>
-                    <div class="time">16:00 ～ 17:00</div>
-                </div>
-                <div class="join">🎥 Meet</div>
-            </a>
-
-            <a class="card" href="https://meet.google.com/ttn-evje-ims" target="_blank" rel="noopener noreferrer">
-                <div class="info">
-                    <div class="period">17:00 "https://meet.google.com/ttn-evje-ims"</div>
-                    <div class="time">17:00 ～ 18:00</div>
-                </div>
-                <div class="join">🎥 Meet</div>
-            </a>
-
+      sc.innerHTML += `
+    <a class="card" href="${l[3]}" target="_blank" rel="noopener noreferrer">
+        <div>
+            <div class="period">${l[0]}</div>
+            <div class="url">${meetCode}</div>
+            <div class="time">${l[1]} ～ ${l[2]}</div>
         </div>
+        <div class="join">🎥 Meet</div>
+    </a>`;
+    });
+    const cards = [...document.querySelectorAll(".card")];
 
-    </div>
+    function m(t) {
+      let [a, b] = t.split(":").map(Number);
+      return a * 60 + b
+    }
+    const status = document.getElementById("status");
 
+    function tick() {
+      let n = new Date(),
+        now = n.getHours() * 60 + n.getMinutes();
+      cards.forEach(c => c.className = "card");
+      let active = false,
+        next = null;
+      lessons.forEach((l, i) => {
+        let s = m(l[1]),
+          e = m(l[2]);
+        if (now >= s && now < e) {
+          active = true;
+          document.title = "🟢 " + l[0] + " 授業中";
+          cards[i].classList.add(now >= e - 5 ? "ending" : "active");
+          status.textContent = now >= e - 5 ? `🔴 ${l[0]} あと${e-now}分で終了` : `🟢 ${l[0]} 授業中`;
+          cards[i].scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+        } else if (now >= s - 5 && now < s) {
+          cards[i].classList.add("soon");
+          status.textContent = `🟡 ${l[0]} あと${s-now}分で開始`;
+          document.title = "🟡 " + l[0] + " まもなく開始";
+          next = true;
+        } else if (now < s && !next) {
+          next = l;
+        }
+      });
+      if (!active && !document.querySelector(".soon")) {
+        if (next && Array.isArray(next)) {
+          status.textContent = `⏰ 次は${next[0]} (${next[1]})`;
+          document.title = "📚 Google Meet 時間割";
+        } else {
+          status.textContent = "🌙 本日の授業は終了しました";
+          document.title = "🌙 授業終了";
+        }
+      }
+    }
+    tick();
+    setInterval(tick, 30000);
+  </script>
 </body>
 
 </html>
